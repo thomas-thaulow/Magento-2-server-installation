@@ -6,7 +6,6 @@
 #=================================================================================#
 SELF=$(basename $0)
 MAGENX_VER="2.8.240.1"
-MAGENX_BASE="https://magenx.sh"
 
 # Config path
 MAGENX_CONFIG_PATH="/opt/magenx/config"
@@ -24,7 +23,7 @@ ELKREPO="7.x"
 # Magento
 MAGE_VERSION="2"
 MAGE_VERSION_FULL=$(curl -s https://api.github.com/repos/magento/magento${MAGE_VERSION}/tags 2>&1 | head -3 | grep -oP '(?<=")\d.*(?=")')
-REPO_MAGE="composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition"
+REPO_MAGE="composer create-project --repository-url=https://repo.magento.com/magento/project-community-edition"
 
 # Repositories
 REPO_PERCONA="https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
@@ -37,7 +36,7 @@ PHP_PECL_PACKAGES=(pecl-redis pecl-lzf pecl-geoip pecl-zip pecl-memcache pecl-oa
 PERL_MODULES=(LWP-Protocol-https Config-IniFiles libwww-perl CPAN Template-Toolkit Time-HiRes ExtUtils-CBuilder ExtUtils-Embed ExtUtils-MakeMaker TermReadKey DBI DBD-MySQL Digest-HMAC Digest-SHA1 Test-Simple Moose Net-SSLeay devel)
 
 # Nginx extra configuration
-REPO_MAGENX_TMP="https://raw.githubusercontent.com/magenx/Magento-2-server-installation/master/"
+REPO_MAGENX_TMP="https://raw.githubusercontent.com/wigman/Magento-2-server-installation/master/"
 NGINX_VERSION=$(curl -s http://nginx.org/en/download.html | grep -oP '(?<=gz">nginx-).*?(?=</a>)' | head -1)
 NGINX_BASE="https://raw.githubusercontent.com/magenx/Magento-nginx-config/master/"
 GITHUB_REPO_API_URL="https://api.github.com/repos/magenx/Magento-nginx-config/contents/magento2"
@@ -231,35 +230,6 @@ if [[ ${RESULT} == up ]]; then
   echo
   exit 1
 fi
-
-# check if you need update
-    MD5_NEW=$(curl -sL ${MAGENX_BASE} > magenx.sh.new && md5sum magenx.sh.new | awk '{print $1}')
-        MD5=$(md5sum ${SELF} | awk '{print $1}')
-            if [[ "${MD5_NEW}" == "${MD5}" ]]; then
-            GREENTXT "PASS: INTEGRITY CHECK FOR '${SELF}' OK"
-            rm magenx.sh.new
-            elif [[ "${MD5_NEW}" != "${MD5}" ]]; then
-            echo
-            YELLOWTXT "INTEGRITY CHECK FOR '${SELF}'"
-            YELLOWTXT "DETECTED DIFFERENT MD5 CHECKSUM"
-            YELLOWTXT "REMOTE REPOSITORY FILE HAS SOME CHANGES"
-            REDTXT "IF YOU HAVE LOCAL CHANGES - SKIP UPDATES"
-            echo
-                _echo "[?] Would you like to update the file now?  [y/n][y]:"
-		read update_agree
-		if [ "${update_agree}" == "y" ];then
-		mv magenx.sh.new ${SELF}
-		echo
-                GREENTXT "THE FILE HAS BEEN UPGRADED, PLEASE RUN IT AGAIN"
-		echo
-                exit 1
-            else
-        echo
-        YELLOWTXT "NEW FILE SAVED TO magenx.sh.new"
-        echo
-  fi
-fi
-
 
 # do we have CentOS?
 if grep "CentOS.* ${CENTOS_VERSION}\." /etc/centos-release > /dev/null 2>&1; then
