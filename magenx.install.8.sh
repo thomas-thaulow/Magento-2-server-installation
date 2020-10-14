@@ -1694,7 +1694,7 @@ echo "PS1='\[\e[37m\][\[\e[m\]\[\e[32m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[35m\]\
 echo
 echo
 ## simple installation statis
-curl --silent -X POST https://www.magenx.com/ping_back_domain_${MAGE_DOMAIN}_geo_${MAGE_TIMEZONE}_keep_30d >/dev/null 2>&1
+# curl --silent -X POST https://www.magenx.com/ping_back_domain_${MAGE_DOMAIN}_geo_${MAGE_TIMEZONE}_keep_30d >/dev/null 2>&1
 echo
 pause '[] Press [Enter] key to show menu'
 ;;
